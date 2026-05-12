@@ -1,0 +1,12 @@
+function doThing argument1 argument2 {
+    if argument1 is argument2 <
+        print(argument1)
+    > else (
+        print(argument1)
+        print(argument2)
+    )
+}
+first = "test"
+second = 123
+1234.
+doThing(first second)

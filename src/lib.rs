@@ -44,3 +44,111 @@ impl fmt::Display for Token {
         }
     }
 }
+
+/**
+expression -> literal | unary | binary | grouping | assignment
+literal -> "String" | "Number" | "True" | "False"
+unary -> "Not" expression
+binary -> expression operator expression
+operator -> ("And" | "Or" | "Xor" | "Is")
+grouping -> "LeftScope" expression "RightScope"
+assignment -> "Identifier" "Equals" expression
+**/
+pub trait PrettyPrint {
+    fn pretty_print(&self) -> String;
+}
+
+pub enum Expr {
+    Literal(Literal),
+    Unary(Box<Unary>),
+    Binary(Box<Binary>),
+    Grouping(Box<Grouping>),
+    Assignment(Box<Assignment>),
+}
+impl PrettyPrint for Expr {
+    fn pretty_print(&self) -> String {
+        match self {
+            Expr::Literal(expr) => expr.pretty_print(),
+            Expr::Unary(expr) => expr.pretty_print(),
+            Expr::Binary(expr) => expr.pretty_print(),
+            Expr::Grouping(expr) => expr.pretty_print(),
+            Expr::Assignment(expr) => expr.pretty_print(),
+        }
+    }
+}
+
+pub enum Literal {
+    String(String),
+    Number(f64),
+    True(bool),
+    False(bool),
+}
+impl PrettyPrint for Literal {
+    fn pretty_print(&self) -> String {
+        match self {
+            Literal::String(value) => String::from(value),
+            Literal::Number(value) => value.to_string(),
+            Literal::True(_) => String::from("true"),
+            Literal::False(_) => String::from("false"),
+        }
+    }
+}
+
+pub enum Unary {
+    Not(Box<Expr>),
+}
+impl PrettyPrint for Unary {
+    fn pretty_print(&self) -> String {
+        match self {
+            Unary::Not(expr) => format!("not {}", expr.pretty_print()),
+        }
+    }
+}
+
+pub struct Binary {
+    pub left: Box<Expr>,
+    pub right: Box<Expr>,
+    pub operator: Operator,
+}
+impl PrettyPrint for Binary {
+    fn pretty_print(&self) -> String {
+        format!("{} {} {}", self.left.pretty_print(), self.operator.pretty_print(), self.right.pretty_print())
+    }
+}
+
+pub enum Operator {
+    And,
+    Or,
+    Xor,
+    Is
+}
+impl PrettyPrint for Operator {
+    fn pretty_print(&self) -> String {
+        match self {
+            Operator::And => String::from("and"),
+            Operator::Or => String::from("or"),
+            Operator::Xor => String::from("xor"),
+            Operator::Is => String::from("is"),
+        }
+    }
+}
+
+pub struct Grouping {
+    pub expression: Box<Expr>,
+}
+impl PrettyPrint for Grouping {
+    fn pretty_print(&self) -> String {
+        format!("({})", self.expression.pretty_print())
+    }
+}
+
+pub struct Assignment {
+    pub identifier: String,
+    pub expression: Box<Expr>,
+}
+impl PrettyPrint for Assignment {
+    fn pretty_print(&self) -> String {
+        format!("{} = {}", self.identifier, self.expression.pretty_print())
+    }
+}
+

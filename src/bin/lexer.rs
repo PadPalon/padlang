@@ -1,6 +1,6 @@
 use clap::Parser;
-use std::fs;
 use padlang::lexer::scan_tokens;
+use std::fs;
 
 #[derive(Parser)]
 #[command(version, about, long_about = None)]

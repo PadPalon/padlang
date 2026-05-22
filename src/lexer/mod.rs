@@ -21,15 +21,15 @@ pub fn scan_tokens(sourcecode: String) -> Result<Vec<Token>, String> {
     while let Some(&character) = characters.peek() {
         match character {
             '(' | '{' | '<' | '[' => {
-                tokenize_single_character(TokenType::LeftScope);
+                tokens.push(tokenize_single_character(TokenType::LeftScope));
                 advance(&mut characters, &mut character_number);
             }
             ')' | '}' | '>' | ']' => {
-                tokenize_single_character(TokenType::RightScope);
+                tokens.push(tokenize_single_character(TokenType::RightScope));
                 advance(&mut characters, &mut character_number);
             }
             '=' => {
-                tokenize_single_character(TokenType::Equals);
+                tokens.push(tokenize_single_character(TokenType::Equals));
                 advance(&mut characters, &mut character_number);
             }
 

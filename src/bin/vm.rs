@@ -1,7 +1,7 @@
 use clap::Parser;
 use padlang::lexer::scan_tokens;
 use padlang::parser::parse;
-use padlang::PrettyPrint;
+use padlang::vm::run;
 use std::fs;
 
 #[derive(Parser)]
@@ -19,5 +19,5 @@ fn main() {
         Err(error_message) => panic!("{}", error_message),
     };
     let parsed = parse(tokens);
-    print!("{}", parsed.pretty_print());
+    run(parsed);
 }
